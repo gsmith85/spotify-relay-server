@@ -1,0 +1,16 @@
+{
+  "name": "spotify-relay-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.3",
+    "lodash": "^3.10.1",
+    "q": "^1.4.1",
+    "request": "^2.65.0"
+  }
+}
