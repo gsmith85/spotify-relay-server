@@ -3,20 +3,16 @@ const express = require('express');
 const spotify = require('./spotify.js');
 
 const app = express();
-
-app.get('/', function (request, response) {
-  response.send('Hello World!');
-});
+app.set('port', (process.env.PORT || 5000));
 
 app.get('/json', function (request, response) {
   return spotify.getPlaylist().then(function (data) {
-    response.json(data)
+    response.header("Access-Control-Allow-Origin", process.env.ACCESS_CONTROL_ALLOW_ORIGIN);
+    response.json(data);
   });
 });
 
-app.use(express.static('public'));
-
-var server = app.listen(3000, function () {
+var server = app.listen(app.get('port'), function () {
   var host = server.address().address;
   var port = server.address().port;
 

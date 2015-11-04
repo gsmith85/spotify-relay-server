@@ -53,8 +53,9 @@ function makeRequestAfterAuthenticationTokenResolves(options) {
 
 module.exports = {
     getPlaylist: function getPlaylist() {
+        console.log(process.env.PLAYLIST_URL);
         return makeRequestAfterAuthenticationTokenResolves({
-            url: "https://api.spotify.com/v1/users/125903902/playlists/5XnDCrSGixR2OfMLZZPa4V"
+            url: process.env.PLAYLIST_URL
         });
     }
 };
