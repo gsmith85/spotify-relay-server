@@ -12,9 +12,9 @@ app.get('/json', function (request, response) {
   });
 });
 
-var server = app.listen(app.get('port'), function () {
-  var host = server.address().address;
-  var port = server.address().port;
+const server = app.listen(app.get('port'), function () {
+  const host = server.address().address;
+  const port = server.address().port;
 
   console.log('Example app listening at http://%s:%s', host, port);
 });

@@ -5,34 +5,36 @@ const request = require('request');
 const q = require('q');
 
 
-let ENCODED_CLIENT_AUTHENTICATION = (function base64EncodeClientIdAndSecret() {
+const ENCODED_CLIENT_AUTHENTICATION = (function base64EncodeClientIdAndSecret() {
     return new Buffer(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64')
 })();
 
 // this is a deferred object
 function genericJsonHttpHandler(error, response, body) {
-    if (!error && response.statusCode == 200) {
-        this.resolve(JSON.parse(body));
+    if (!error && response.statusCode === 200) {
+        this.resolve(body);
     } else {
         this.reject(error);
     }
 }
 
-let SPOTIFY_AUTHORIZATION_TOKEN_PROMISE =
+const SPOTIFY_AUTHORIZATION_TOKEN_PROMISE =
     (function getAuthorizationToken () {
-        const deferred = q.defer();
-
-        let authOptions = {
+        // https://developer.spotify.com/documentation/general/guides/authorization/client-credentials/
+        const authOptions = {
             url: 'https://accounts.spotify.com/api/token',
             headers: {
                 'Authorization': 'Basic ' + ENCODED_CLIENT_AUTHENTICATION
             },
-            form: 'grant_type=client_credentials', // adds Content-type: application/x-www-form-urlencoded like curl -d does
-            method: 'POST'
+            form: {
+                grant_type: 'client_credentials'
+            },
+            method: 'POST',
+            json: true,
         };
 
+        const deferred = q.defer();
         request(authOptions, _.bind(genericJsonHttpHandler, deferred));
-
         return deferred.promise;
     })();
 
@@ -55,7 +57,8 @@ module.exports = {
     getPlaylist: function getPlaylist() {
         console.log(process.env.PLAYLIST_URL);
         return makeRequestAfterAuthenticationTokenResolves({
-            url: process.env.PLAYLIST_URL
+            url: 'https://api.spotify.com/v1/playlists/' + process.env.PLAYLIST_ID,
+            json: true
         });
     }
 };
