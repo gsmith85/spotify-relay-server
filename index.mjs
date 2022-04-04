@@ -1,13 +1,17 @@
 'use strict';
-const express = require('express');
-const spotify = require('./spotify.js');
+
+import express from 'express';
+import spotify from './spotify.mjs';
 
 const app = express();
-app.set('port', (process.env.PORT || 5000));
+app.set('port', process.env.PORT || 5000);
 
 app.get('/json', function (request, response) {
   return spotify.getPlaylist().then(function (data) {
-    response.header("Access-Control-Allow-Origin", process.env.ACCESS_CONTROL_ALLOW_ORIGIN);
+    response.header(
+      'Access-Control-Allow-Origin',
+      process.env.ACCESS_CONTROL_ALLOW_ORIGIN
+    );
     response.json(data);
   });
 });
